@@ -3,15 +3,17 @@
 -->
 <!DOCTYPE html>
 <html lang="en" style="height: 100%">
+
 <head>
   <meta charset="utf-8">
 </head>
+
 <body style="height: 100%; margin: 0">
   <div id="container" style="height: 100%"></div>
 
   <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
   <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
-  
+
   <!-- Uncomment this line if you want to dataTool extension
   <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/extension/dataTool.min.js"></script>
   -->
@@ -25,8 +27,8 @@
   <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts-graph-modularity@2/dist/echarts-graph-modularity.min.js"></script>
   -->
   <!-- Uncomment this line if you want to use map -->
-  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
- 
+  <!-- <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script> -->
+
   <!-- Uncomment these two lines if you want to use bmap extension
   <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=YOUR_API_KEY"></script>
   <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/extension/bmap.min.js"></script>
@@ -39,60 +41,93 @@
       useDirtyRect: false
     });
     var app = {};
-    var ROOT_PATH = 'https://dummyjson.com/c/3099-5ffe-4e25-803b';
+    var ROOT_PATH = 'https://dummyjson.com/c/fae9-2844-4764-9055';
     var option;
 
     myChart.showLoading();
-$.get(ROOT_PATH, function (data) {
-  myChart.hideLoading();
-  data.children.forEach(function (datum, index) {
-    index % 2 === 0 && (datum.collapsed = true);
-  });
-  myChart.setOption(
-    (option = {
-      tooltip: {
-        trigger: 'item',
-        triggerOn: 'mousemove'
-      },
-      series: [
-        {
-          type: 'tree',
-          data: [data],
-          top: '1%',
-          left: '7%',
-          bottom: '1%',
-          right: '20%',
-          symbolSize: 7,
-          label: {
-            position: 'top',
-            verticalAlign: 'middle',
-            align: 'right',
-            fontSize: 12
-          },
-          leaves: {
-            label: {
-              position: 'right',
-              verticalAlign: 'middle',
-              align: 'left'
-            }
-          },
-          emphasis: {
-            focus: 'descendant'
-          },
-          expandAndCollapse: true,
-          animationDuration: 550,
-          animationDurationUpdate: 750
-        }
-      ]
-    })
-  );
+    myChart.on('click', function(params) {
+  //Check if what you clicked on is part of a treemap
+  // if(params.seriesType == "treemap"){
+    console.log(params.name); //full node object
+    if (params.name == "School of Technology"){
+      ROOT_PATH = 'https://dummyjson.com/c/b5e4-f93e-4509-a0f3';
+    loadChart(ROOT_PATH)
+    }
+    else if(params.name=="Mechanical Department"){
+      ROOT_PATH = "https://dummyjson.com/c/c7e8-f8c8-46e2-9002";
+      loadChart(ROOT_PATH)
+    }
+    else if(params.name=="Robotics and Computational Mechanic"){
+      ROOT_PATH = "https://dummyjson.com/c/ffc2-157c-476e-9289";
+      loadChart(ROOT_PATH)
+    }
+    else if(params.name=="Product Design and Adv Manufacturing"){
+      ROOT_PATH = "https://dummyjson.com/c/ca8e-bd0b-42db-be10";
+      loadChart(ROOT_PATH)
+    }
+    else if(params.name=="Energy Engineering"){
+      ROOT_PATH = "https://dummyjson.com/c/d061-1fac-414d-ac22";
+      loadChart(ROOT_PATH)
+    }
+  // }
 });
+
+function loadChart(ROOT_PATH){
+  $.get(ROOT_PATH, function (data) {
+      myChart.hideLoading();
+      data.children.forEach(function (datum, index) {
+        index % 1 === 0 && (datum.collapsed = true);
+      });
+      myChart.setOption(
+        (option = {
+          tooltip: {
+            trigger: 'item',
+            triggerOn: 'mousemove'
+          },
+          series: [
+            {
+              type: 'tree',
+              data: [data],
+              top: '1%',
+              left: '7%',
+              bottom: '1%',
+              right: '20%',
+              symbolSize: 10,
+              label: {
+                position: 'top',
+                verticalAlign: 'middle',
+                align: 'right',
+                fontSize: 12
+              },
+              leaves: {
+                label: {
+                  position: 'right',
+                  verticalAlign: 'middle',
+                  align: 'left'
+                }
+              },
+              emphasis: {
+                focus: 'descendant'
+              },
+              expandAndCollapse: true,
+              animationDuration: 550,
+              animationDurationUpdate: 750
+            }
+          ]
+        })
+      );
+    });
 
     if (option && typeof option === 'object') {
       myChart.setOption(option);
     }
 
     window.addEventListener('resize', myChart.resize);
+}
+    
+loadChart(ROOT_PATH)
+    
   </script>
 </body>
+
 </html>
